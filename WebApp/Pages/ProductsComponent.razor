@@ -1,0 +1,79 @@
+﻿@page "/products"
+@inject UseCases.IViewProductsUseCase ViewProductsUseCase
+@inject UseCases.IGetCategoryByIdUseCase GetCategoryByIdUseCase
+@inject UseCases.IDeleteProductUseCase DeleteProductUseCase
+@inject NavigationManager navigationManager
+
+<h3>Products</h3>
+
+@if(products!=null)
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Product Category</th>
+				<th>Product Name</th>				
+				<th>Price</th>
+				<th>Quantity</th>
+
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var product in products)
+			{
+				<tr>
+					<td>@(product.CategoryId.HasValue? GetCategoryByIdUseCase.Execute(product.CategoryId.Value)?.Name:"")</td>
+					<td>@product.Name</td>					
+					<td>@Math.Round(product.Price.Value,2)</td>
+					<td>@product.Quantity</td>
+					<td>
+						<button type="button" class="btn btn-link" @onclick="@(()=> OnEditProduct(product))">Edit</button>						
+						<button type="button" class="btn btn-link" @onclick="@(()=> {confirm = true; ProductId = product.ProductId; })">Delete</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+<br />
+<button type="button" class="btn btn-primary" @onclick="OnClickToAddProduct">Add Product</button>
+<MessageBox Titulo="Aviso" onConfirm="() => OnDeleteProduct(ProductId)" onCancel = "() => confirm = false"  MostrarConfirmation = "confirm"  ><h3>Desea eliminar el producto?</h3></MessageBox>
+
+@code {
+	private IEnumerable<Product> products;
+	private int ProductId;
+	private bool confirm = false;
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+
+		LoadProducts();
+	}
+
+	private void OnClickToAddProduct()
+	{
+		navigationManager.NavigateTo("/addProduct");
+	}
+
+	private void OnEditProduct(Product product)
+	{
+		navigationManager.NavigateTo($"/editProduct/{product.ProductId}");
+	}
+
+	private async void OnDeleteProduct(int productId)
+	{
+
+
+		await DeleteProductUseCase.Execute(productId);
+
+		confirm = false;
+		LoadProducts();
+	}
+
+	private void LoadProducts()
+	{
+		products = ViewProductsUseCase.Execute();
+	}
+}
