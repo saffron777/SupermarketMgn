@@ -7,6 +7,7 @@ using WebApp.Data;
 using Radzen;
 using Plugins.DataStore.SQL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,15 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddDbContext<MarketContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
 builder.Services.AddEntityFrameworkSqlServer();
+
+
+builder.Services.AddAuthorization( options =>
+{
+    options.AddPolicy("AdminOnly", p => p.RequireClaim("Position", "Admin"));
+    options.AddPolicy("CashierOnly", p => p.RequireClaim("Position", "Cashier"));
+});
 
 //Data Store in memory
 //builder.Services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
@@ -71,7 +80,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapRazorPages();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

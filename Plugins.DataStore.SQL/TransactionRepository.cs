@@ -1,4 +1,5 @@
 ﻿using CoreBussines;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Plugins.DataStore.SQL
             if (string.IsNullOrEmpty(cashierName))
                 return db.transactions.ToList();
             else
-                return db.transactions.Where(x => x.CashierName.ToLower() == cashierName.ToLower()).ToList();
+                return db.transactions.Where(x => EF.Functions.Like(x.CashierName, $"%{cashierName}%")).ToList();
         }
 
         public IEnumerable<Transaction> GetByDay(string cashierName, DateTime date)
@@ -30,7 +31,7 @@ namespace Plugins.DataStore.SQL
             if (string.IsNullOrEmpty(cashierName))
                 return db.transactions.Where(x => x.TimeStamp.Date == date.Date).ToList();
             else
-                return db.transactions.Where(x => x.TimeStamp.Date == date.Date && x.CashierName.ToLower() == cashierName.ToLower()).ToList();
+                return db.transactions.Where(x => x.TimeStamp.Date == date.Date && EF.Functions.Like(x.CashierName, $"%{cashierName}%" )).ToList();
         }
 
         public void Save(string cashierName, int productId, string productName, double? price, int beforeQty, int soldQty)
@@ -54,7 +55,7 @@ namespace Plugins.DataStore.SQL
             if (string.IsNullOrEmpty(cashierName))
                 return db.transactions.Where(x => x.TimeStamp >= startDate.Date && x.TimeStamp <= endDate.Date.AddDays(1).Date).ToList();
             else
-                return db.transactions.Where(x => (x.TimeStamp >= startDate.Date && x.TimeStamp <= endDate.Date.AddDays(1).Date) && x.CashierName.ToLower() == cashierName.ToLower()).ToList();
+                return db.transactions.Where(x => (x.TimeStamp >= startDate.Date && x.TimeStamp <= endDate.Date.AddDays(1).Date) && EF.Functions.Like(x.CashierName, $"%{cashierName}%")).ToList();
         }
     }
 }
