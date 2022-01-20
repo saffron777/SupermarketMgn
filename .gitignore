@@ -1,0 +1,18 @@
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+/WebApp/bin/Debug/net6.0
+/Plugins.DataStore.InMemory/bin/Debug/net6.0
+/SupermarketManagement/obj
+/UseCases/bin/Debug/net6.0
+/CoreBussines/bin/Debug/net6.0
+/WebApp/obj
+/UseCases/obj
+/SupermarketManagement/bin/Debug/net6.0
+/Plugins.DataStore.InMemory/obj
+/CoreBussines/obj
+/.vs/SupermarketManagement
+/WebApp/WebApp.csproj.user
+/Plugins.DataStore.SQL/bin/Debug/net6.0
+/Plugins.DataStore.SQL/obj

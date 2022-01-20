@@ -9,10 +9,10 @@ namespace UseCases
 {
     public class RecordTransacctionUseCase : IRecordTransacctionUseCase
     {
-        private readonly ITransacctionRepository transacctionRepository;
+        private readonly ITransactionRepository transacctionRepository;
         private readonly IGetProductByIdUseCase getProductByIdUseCase;
 
-        public RecordTransacctionUseCase(ITransacctionRepository transacctionRepository, IGetProductByIdUseCase getProductByIdUseCase)
+        public RecordTransacctionUseCase(ITransactionRepository transacctionRepository, IGetProductByIdUseCase getProductByIdUseCase)
         {
             this.transacctionRepository = transacctionRepository;
             this.getProductByIdUseCase = getProductByIdUseCase;

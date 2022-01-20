@@ -5,6 +5,9 @@ using UseCases;
 using UseCases.DataStorePluginInterfaces;
 using WebApp.Data;
 using Radzen;
+using Plugins.DataStore.SQL;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +16,22 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-//Data Store
-builder.Services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
-builder.Services.AddScoped<IProductRepository, ProductInMemoryRepository>();
-builder.Services.AddScoped<ITransacctionRepository, TransacctionInMemoryRepository>();
+
+builder.Services.AddDbContext<MarketContext>(option =>
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+builder.Services.AddEntityFrameworkSqlServer();
+
+//Data Store in memory
+//builder.Services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
+//builder.Services.AddScoped<IProductRepository, ProductInMemoryRepository>();
+//builder.Services.AddScoped<ITransactionRepository, TransacctionInMemoryRepository>();
+
+//data Store SQL
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
 
 //Repositoriesl
 builder.Services.AddTransient<IViewCategoriesUseCase, ViewCategoriesUseCase>();
@@ -33,6 +48,7 @@ builder.Services.AddTransient<IViewProductsByCategoryId, ViewProductsByCategoryI
 builder.Services.AddTransient<ISellProductUseCase, SellProductUseCase>();
 builder.Services.AddTransient<IRecordTransacctionUseCase, RecordTransacctionUseCase>();
 builder.Services.AddTransient<IGetTodayTransactionsUseCase, GetTodayTransactionsUseCase>();
+builder.Services.AddTransient<IGetTransactionsUseCase, GetTransactionsUseCase>();
 
 //radzen
 builder.Services.AddScoped<DialogService>();

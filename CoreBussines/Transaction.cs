@@ -9,6 +9,7 @@ namespace CoreBussines
 {
     public class Transaction
     {
+        [Key]
         public int TransacctionId { get; set; }
         public DateTime TimeStamp { get; set; }
         public int ProductId { get; set; }

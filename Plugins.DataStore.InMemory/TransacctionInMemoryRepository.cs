@@ -8,7 +8,7 @@ using UseCases.DataStorePluginInterfaces;
 
 namespace Plugins.DataStore.InMemory
 {
-    public class TransacctionInMemoryRepository : ITransacctionRepository
+    public class TransacctionInMemoryRepository : ITransactionRepository
     {
         private List<Transaction> transacctions;
 
@@ -32,6 +32,14 @@ namespace Plugins.DataStore.InMemory
             else
                 return transacctions.Where(x => x.TimeStamp.Date == date.Date &&  string.Equals(x.CashierName, cashierName, StringComparison.OrdinalIgnoreCase));
             
+        }
+
+        public IEnumerable<Transaction> Search(string cashierName, DateTime startDate, DateTime endDate)
+        {
+            if (string.IsNullOrEmpty(cashierName))
+                return transacctions.Where(x => x.TimeStamp >= startDate.Date && x.TimeStamp<= endDate.Date.AddDays(1).Date);
+            else
+                return transacctions.Where(x => (x.TimeStamp >= startDate.Date && x.TimeStamp <= endDate.Date.AddDays(1).Date)  && string.Equals(x.CashierName, cashierName, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Save(string cashierName, int productId, string productName, double? price, int beforeQty ,int soldQty)

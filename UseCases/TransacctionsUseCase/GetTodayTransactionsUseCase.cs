@@ -10,9 +10,9 @@ namespace UseCases
 {
     public class GetTodayTransactionsUseCase : IGetTodayTransactionsUseCase
     {
-        private readonly ITransacctionRepository transacctionRepository;
+        private readonly ITransactionRepository transacctionRepository;
 
-        public GetTodayTransactionsUseCase(ITransacctionRepository transacctionRepository)
+        public GetTodayTransactionsUseCase(ITransactionRepository transacctionRepository)
         {
             this.transacctionRepository = transacctionRepository;
         }
