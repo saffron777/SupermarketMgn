@@ -42,13 +42,20 @@
 
 @code {
 	private IEnumerable<Product> products;
-	private int ProductId;
+	private static int ProductId;
 	private bool confirm = false;
+
+	//private MessageBox msgBox = new MessageBox
+	//	{
+	//		 Titulo = "Aviso",
+	//		 ChildContent = __builder =>  {<h3>Desea eliminar el producto?</h3>},
+			 
+	//	};
 
 	protected override void OnInitialized()
 	{
-		base.OnInitialized();
 
+		base.OnInitialized();
 		LoadProducts();
 	}
 
@@ -62,12 +69,17 @@
 		navigationManager.NavigateTo($"/editProduct/{product.ProductId}");
 	}
 
+	
 	private async void OnDeleteProduct(int productId)
 	{
+		
+
+		//msgBox.Mostrar();
 
 
 		await DeleteProductUseCase.Execute(productId);
 
+		//msgBox.Ocultar();
 		confirm = false;
 		LoadProducts();
 	}

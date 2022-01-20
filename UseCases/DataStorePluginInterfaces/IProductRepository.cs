@@ -14,5 +14,6 @@ namespace UseCases
         void UpdateProduct(Product product);
         Product GetProductById(int productId);
         Task DeleteProduct(int productId);
+        IEnumerable<Product> ProductsByCategoryId(int categoryId);
     }
 }
